@@ -7,9 +7,9 @@ RUN pip install papermill
 RUN pip install ipywidgets
 
 # Code
-COPY data/* data/
-COPY *.ipynb .
-COPY *.py .
+COPY src/ src/
+COPY data/ data/
+COPY main.py main.py
 
 # Jupyter
 EXPOSE 8888
