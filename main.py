@@ -2,7 +2,7 @@ import papermill as pm
 
 ### Evaluation parameters ###
 sample_users = 100
-recommendations_per_user = 50
+recommendations_per_user = 10
 
 ### Sample users ###
 pm.execute_notebook(
@@ -59,5 +59,15 @@ pm.execute_notebook(
     "out/analyse_sampled_recommendations.ipynb",
    parameters = {
        "recommendations": "out/sampled-recommendations.json",
+   }
+)
+
+# Compare recommendations
+pm.execute_notebook(
+   "src/compare_recommendations.ipynb",
+    "out/compare_sampled_recommendations.ipynb",
+   parameters = {
+       "baseline_recommendations": "out/baseline-recommendations.json",
+        "sampled_recommendations": "out/sampled-recommendations.json",
    }
 )
