@@ -1,12 +1,25 @@
 import papermill as pm
 
 pm.execute_notebook(
+   "src/sample_users.ipynb",
+    "out/sample_users.ipynb",
+   parameters = {
+       "data": "data/tweets-dedupe.csv",
+       "output": "out/users.json",
+       "sample": 100,
+   }
+)
+
+pm.execute_notebook(
    "src/query_recommendations.ipynb",
     "out/query_recommendations.ipynb",
    parameters = {
-       "data": "data/tweets-dedupe.csv",
-       "sample": 100,
-       "results": "out/tweets-dedupe.json",
-       "top_n": 50
+       "users": "out/users.json",
+       "output": "out/tweet-recommendations.json",
+       "top_n": 50,
    }
 )
+
+   }
+)
+
