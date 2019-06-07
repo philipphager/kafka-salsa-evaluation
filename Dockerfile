@@ -14,4 +14,4 @@ COPY main.py main.py
 # Jupyter
 EXPOSE 8888
 
-CMD python main.py
+CMD python main.py && jupyter notebook
