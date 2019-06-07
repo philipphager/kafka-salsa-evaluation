@@ -20,6 +20,11 @@ pm.execute_notebook(
    }
 )
 
+pm.execute_notebook(
+   "src/analyse_recommendations.ipynb",
+    "out/qanalyse_recommendations.ipynb",
+   parameters = {
+       "recommendations": "out/tweet-recommendations.json",
    }
 )
 
