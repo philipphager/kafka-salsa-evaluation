@@ -20,9 +20,12 @@ pm.execute_notebook(
    }
 )
 
+# Reset evaluation here...
+# Query API again
+
 pm.execute_notebook(
    "src/analyse_recommendations.ipynb",
-    "out/qanalyse_recommendations.ipynb",
+    "out/analyse_recommendations.ipynb",
    parameters = {
        "recommendations": "out/tweet-recommendations.json",
    }
