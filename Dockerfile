@@ -5,6 +5,7 @@ RUN pip install pandas
 RUN pip install requests
 RUN pip install papermill
 RUN pip install ipywidgets
+RUN pip install -e git+https://github.com/changyaochen/rbo.git@master#egg=rbo
 
 # Code
 COPY src/ src/
