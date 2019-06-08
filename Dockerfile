@@ -6,6 +6,7 @@ RUN pip install requests
 RUN pip install papermill
 RUN pip install ipywidgets
 RUN pip install -e git+https://github.com/changyaochen/rbo.git@master#egg=rbo
+RUN pip install seaborn
 
 # Code
 COPY src/ src/
