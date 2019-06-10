@@ -1,6 +1,6 @@
 dataset:
   path: data/tweets-dedupe.csv
-  sample_size: 100
+  sample_size: 1000
   top_n: 10
 applications:
   - simple:
