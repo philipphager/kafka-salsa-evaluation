@@ -4,7 +4,6 @@ import yaml
 ### Parameters ###
 with open("evaluation.yaml", "r") as file:
    params = yaml.load(file)
-   print(params)
 
 ### Sample users from dataset ###
 pm.execute_notebook(
