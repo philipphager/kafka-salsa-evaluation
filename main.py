@@ -1,73 +1,57 @@
 import papermill as pm
+import yaml
 
-### Evaluation parameters ###
-sample_users = 100
-recommendations_per_user = 10
+### Parameters ###
+with open("evaluation.yaml", "r") as file:
+   params = yaml.load(file)
+   print(params)
 
-### Sample users ###
+### Sample users from dataset ###
 pm.execute_notebook(
    "src/sample_users.ipynb",
     "out/sample_users.ipynb",
    parameters = {
-       "data": "data/tweets-dedupe.csv",
-       "output": "out/users.json",
-       "sample": sample_users,
+       "data": params["dataset"]["path"],
+       "output": "out/dataset.json",
+       "sample": params["dataset"]["sample_size"],
    }
 )
 
-### Fetch recommendations from API ###
-# Fetch baseline recommendations
-pm.execute_notebook(
-   "src/query_recommendations.ipynb",
-    "out/query_baseline_recommendations.ipynb",
-   parameters = {
-       "host": "host.docker.internal",
-       "port": "8070",
-       "users": "out/users.json",
-       "output": "out/baseline-recommendations.json",
-       "top_n": recommendations_per_user,
-   }
-)
+for application in params["applications"]:
+   app_id = application["id"]
 
-# Fetch sampled recommendations
-# TODO: Add other host / port configuration
-pm.execute_notebook(
-   "src/query_recommendations.ipynb",
-    "out/query_sampled_recommendations.ipynb",
-   parameters = {
-       "host": "host.docker.internal",
-       "port": "8070",
-       "users": "out/users.json",
-       "output": "out/sampled-recommendations.json",
-       "top_n": recommendations_per_user,
-   }
-)
+   ### Fetch recommendations from API ###
+   pm.execute_notebook(
+      "src/query_recommendations.ipynb",
+      f"out/query_{app_id}_recommendations.ipynb",
+      parameters = {
+         "host": application["host"],
+         "port": application["port"],
+         "users": "out/dataset.json",
+         "output": f"out/{app_id}-recommendations.json",
+         "top_n": params["dataset"]["top_n"],
+      }
+   )
 
-### Analysis ###
-# Analyse baseline recommendations
-pm.execute_notebook(
-   "src/analyse_recommendations.ipynb",
-    "out/analyse_baseline_recommendations.ipynb",
-   parameters = {
-       "recommendations": "out/baseline-recommendations.json",
-   }
-)
+   ### Anaylse basic recommendation statistics ###
+   pm.execute_notebook(
+      "src/analyse_recommendations.ipynb",
+      f"out/analyse_{app_id}_recommendations.ipynb",
+      parameters = {
+         "recommendations": f"out/{app_id}-recommendations.json",
+      }
+   )
 
-# Analyse sampled recommendations
-pm.execute_notebook(
-   "src/analyse_recommendations.ipynb",
-    "out/analyse_sampled_recommendations.ipynb",
-   parameters = {
-       "recommendations": "out/sampled-recommendations.json",
-   }
-)
+### Compare recommendations ###
+# TODO: Adjust notebook to support list of applications
+simple = params["applications"][0]["id"]
+sampled = params["applications"][1]["id"]
 
-# Compare recommendations
 pm.execute_notebook(
    "src/compare_recommendations.ipynb",
-    "out/compare_sampled_recommendations.ipynb",
+   "out/compare_recommendations.ipynb",
    parameters = {
-       "baseline_recommendations": "out/baseline-recommendations.json",
-        "sampled_recommendations": "out/sampled-recommendations.json",
+       "baseline_recommendations": f"out/{simple}-recommendations.json",
+       "sampled_recommendations": f"out/{sampled}-recommendations.json",
    }
 )

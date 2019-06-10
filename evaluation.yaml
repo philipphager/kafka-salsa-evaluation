@@ -1,0 +1,13 @@
+dataset:
+  path: data/tweets-dedupe.csv
+  sample_size: 100
+  top_n: 10
+applications:
+  - simple:
+    id: simple
+    host: host.docker.internal
+    port: 8070
+  - sampled:
+    id: sampled
+    host: host.docker.internal
+    port: 8080
