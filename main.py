@@ -1,3 +1,4 @@
+import itertools
 import papermill as pm
 import yaml
 
@@ -5,52 +6,47 @@ import yaml
 with open("evaluation.yaml", "r") as file:
    params = yaml.load(file)
 
+### Paths ###
+sample_path = "out/dataset.json"
+
 ### Sample users from dataset ###
 pm.execute_notebook(
    "src/sample_users.ipynb",
-    "out/sample_users.ipynb",
+   "out/sample_users.ipynb",
    parameters = {
        "data": params["dataset"]["path"],
-       "output": "out/dataset.json",
+       "output": sample_path,
        "sample": params["dataset"]["sample_size"],
    }
 )
 
+### Fetch recommendations from API ###
 for application in params["applications"]:
+   salsa = params["salsa"]
+   configurations = list(itertools.product(salsa["walks"], salsa["walk_length"], salsa["limit"]))
    app_id = application["id"]
 
-   ### Fetch recommendations from API ###
-   pm.execute_notebook(
-      "src/query_recommendations.ipynb",
-      f"out/query_{app_id}_recommendations.ipynb",
-      parameters = {
-         "host": application["host"],
-         "port": application["port"],
-         "users": "out/dataset.json",
-         "output": f"out/{app_id}-recommendations.json",
-         "top_n": params["dataset"]["top_n"],
-      }
-   )
+   for configuration in configurations:
+      walks, walk_length, limit = configuration
+      print(f"Query recommendations: ", app_id, " walks: ", walks, " walk_length: ", walk_length, " limit: ", limit)
 
-   ### Anaylse basic recommendation statistics ###
-   pm.execute_notebook(
-      "src/analyse_recommendations.ipynb",
-      f"out/analyse_{app_id}_recommendations.ipynb",
-      parameters = {
-         "recommendations": f"out/{app_id}-recommendations.json",
-      }
-   )
+      name = f"{app_id}_{walks}walks_{walk_length}length_{limit}limit"
+      recommendation_path = f"out/{name}_recommendations.json"
 
-### Compare recommendations ###
-# TODO: Adjust notebook to support list of applications
-simple = params["applications"][0]["id"]
-sampled = params["applications"][1]["id"]
+      pm.execute_notebook(
+         "src/query_recommendations.ipynb",
+         f"out/query__{name}_recommendations.ipynb",
+         parameters = {
+            "host": application["host"],
+            "port": application["port"],
+            "users": sample_path,
+            "output": recommendation_path,
+            "walks": walks,
+            "walk_length": walk_length,
+            "limit": limit,
+         }
+      )
 
-pm.execute_notebook(
-   "src/compare_recommendations.ipynb",
-   "out/compare_recommendations.ipynb",
-   parameters = {
-       "baseline_recommendations": f"out/{simple}-recommendations.json",
-       "sampled_recommendations": f"out/{sampled}-recommendations.json",
-   }
-)
+### Anaylse recommendations of each application ###
+
+### Compare recommendations between applications ###
