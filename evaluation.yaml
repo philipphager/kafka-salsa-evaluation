@@ -1,13 +1,31 @@
 dataset:
   path: data/tweets-dedupe.csv
   sample_size: 1000
-  top_n: 10
 applications:
   - simple:
     id: simple
-    host: host.docker.internal
-    port: 8070
-  - sampled:
-    id: sampled
-    host: host.docker.internal
-    port: 8080
+    host: 13.80.138.66
+    port: 80
+  - sampling:
+    id: sampling
+    host: 40.68.62.39
+    port: 80
+  - range_key:
+    id: range-key
+    host: 40.68.60.55
+    port: 80
+  - segmented:
+    id: segmented
+    host: 13.80.142.94
+    port: 80
+salsa:
+  walks:
+  - 100
+  - 1000
+  - 10000
+  walk_length:
+  - 100
+  - 1000
+  - 10000
+  limit:
+  - 10
