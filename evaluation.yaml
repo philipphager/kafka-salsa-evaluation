@@ -1,22 +1,22 @@
 dataset:
   path: data/tweets-dedupe.csv
-  sample_size: 1000
+  sample_size: 10
 applications:
   - simple:
     id: simple
-    host: 13.80.138.66
+    host: 23.101.70.215
     port: 80
   - sampling:
     id: sampling
-    host: 40.68.62.39
+    host: 51.136.28.98
     port: 80
   - range_key:
     id: range-key
-    host: 40.68.60.55
+    host: 52.136.246.204
     port: 80
   - segmented:
     id: segmented
-    host: 13.80.142.94
+    host: 23.100.12.244
     port: 80
 salsa:
   walks:
