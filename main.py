@@ -9,41 +9,39 @@ with open("evaluation.yaml", "r") as file:
 ### Paths ###
 sample_path = "out/dataset.json"
 
+### Compute variants ###
+salsa = params["salsa"]
+configurations = list(itertools.product(salsa["walks"], salsa["walk_length"], salsa["limit"]))
+
 ### Sample users from dataset ###
+total_sample_size = params["dataset"]["sample_size"] * len(configurations)
+
 pm.execute_notebook(
    "src/sample_users.ipynb",
    "out/sample_users.ipynb",
    parameters = {
        "data": params["dataset"]["path"],
        "output": sample_path,
-       "sample": params["dataset"]["sample_size"],
+       "sample": total_sample_size,
    }
 )
 
 ### Fetch recommendations from API ###
 for application in params["applications"]:
-   salsa = params["salsa"]
-   configurations = list(itertools.product(salsa["walks"], salsa["walk_length"], salsa["limit"]))
    app_id = application["id"]
 
-   for configuration in configurations:
-      walks, walk_length, limit = configuration
-      print(f"Query recommendations: ", app_id, " walks: ", walks, " walk_length: ", walk_length, " limit: ", limit)
-
-      name = f"{app_id}_{walks}walks_{walk_length}length_{limit}limit"
-      recommendation_path = f"out/{name}_recommendations.json"
-
-      pm.execute_notebook(
+   pm.execute_notebook(
          "src/query_recommendations.ipynb",
-         f"out/query__{name}_recommendations.ipynb",
+         f"out/query__{app_id}_recommendations.ipynb",
          parameters = {
             "host": application["host"],
             "port": application["port"],
             "users": sample_path,
-            "output": recommendation_path,
-            "walks": walks,
-            "walk_length": walk_length,
-            "limit": limit,
+            "output": f"out/{app_id}-recommendations.json",
+            "walks": salsa["walks"],
+            "walk_length": salsa["walk_length"],
+            "limit": salsa["limit"],
+            "sample_size": params["dataset"]["sample_size"],
          }
       )
 
