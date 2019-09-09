@@ -26,10 +26,13 @@ pm.execute_notebook(
    }
 )
 
-### Fetch recommendations from API ###
+recommendation_paths = []
+
 for application in params["applications"]:
    app_id = application["id"]
+   output = f"out/{app_id}-recommendations.json"
 
+   ### Fetch recommendations from API ###
    pm.execute_notebook(
          "src/query_recommendations.ipynb",
          f"out/query__{app_id}_recommendations.ipynb",
@@ -37,14 +40,28 @@ for application in params["applications"]:
             "host": application["host"],
             "port": application["port"],
             "users": sample_path,
-            "output": f"out/{app_id}-recommendations.json",
+            "output": output,
             "walks": salsa["walks"],
             "walk_length": salsa["walk_length"],
             "limit": salsa["limit"],
             "sample_size": params["dataset"]["sample_size"],
-         }
-      )
-
-### Anaylse recommendations of each application ###
+         })
+   
+   ### Anaylse recommendations of each application ###   
+   pm.execute_notebook(
+         "src/analyse_recommendations.ipynb",
+         f"out/analyse__{app_id}_recommendations.ipynb",
+         parameters = {
+            "recommendations": output,
+         })
+   
+   recommendation_paths.append(output)
 
 ### Compare recommendations between applications ###
+pm.execute_notebook(
+         "src/compare_recommendations.ipynb",
+         f"out/compare_recommendations.ipynb",
+         parameters = {
+            "app_id": params["applications"],
+            "recommendations": recommendation_paths,
+         })
