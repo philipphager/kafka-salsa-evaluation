@@ -16,3 +16,4 @@ This repository is part of a larger project. Here is a list of all related repos
 4. Build the Docker image: `docker build --rm -t kafka-salsa/evaluation .`
 5. Download a tweet dataset from [twitter-dataset](https://github.com/philipphager/twitter-dataset/) and place it in `data/`: `wget -P ./data/ https://media.githubusercontent.com/media/philipphager/twitter-dataset/master/v1/tweets-dedupe.csv`
 6. Run the image and mount the `out/` directory to the container to obtain the evaluation results: `docker run -it -p 8888:8888 -v $(pwd)/kafka-salsa-evaluation/out:/home/jovyan/out --rm kafka-salsa/evaluation`
+7. The evaluation results are published as Jupyter notebooks inside the `out/` directory. We recommend to use [nteract](https://nteract.io) to open the notebooks.
