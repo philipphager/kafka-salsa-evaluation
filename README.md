@@ -2,6 +2,13 @@
 
 ## Abstract
 
+## Repository Overview
+This repository is part of a larger project. Here is a list of all related repositories:
+* [kafka-salsa](https://github.com/torbsto/kafka-salsa): Reference implementation and project documentation.
+* [kafka-salsa-evaluation](https://github.com/philipphager/kafka-salsa-evaluation): Evaluation suite for [kafka-salsa](https://github.com/torbsto/kafka-salsa).
+* [twitter-cralwer](https://github.com/philipphager/twitter-crawler): Twitter API crawler for user-tweet-interaction data.
+* [twitter-dataset](https://github.com/philipphager/twitter-dataset): Crawled datasets of user-tweet-interactions used in evaluations.
+
 ## Installation
 1. Clone the repository: `git clone git@github.com:philipphager/kafka-salsa-evaluation.git`
 2. Install and start [Docker](https://www.docker.com/products/docker-desktop).
