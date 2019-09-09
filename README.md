@@ -24,8 +24,8 @@ Configure the evaluation using the [evaluation.yaml](https://github.com/philipph
 
 | Parameter        | Description                        | Default |
 | ---------------- | ---------------------------------- | ------- |
-| dataset-path  | Path to test dataset.  | ./data/tweets-dedupe.csv |
-| dataset-sample_size | Number of users to sample. All evaluation requests will be performed for each sampled user. | 100 |
+| dataset_path  | Path to test dataset.  | ./data/tweets-dedupe.csv |
+| dataset_sample_size | Number of users to sample. All evaluation requests will be performed for each sampled user. | 100 |
 | applications_id | Name for implementaion appraoch. |  |
 | applications_host | IP address of deployed kafka-salsa endpoint. |  |
 | applications_port | Port of deployed kafka-salsa endpoint. |  |
