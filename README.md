@@ -17,3 +17,20 @@ This repository is part of a larger project. Here is a list of all related repos
 5. Download a tweet dataset from [twitter-dataset](https://github.com/philipphager/twitter-dataset/) and place it in `data/`: `wget -P ./data/ https://media.githubusercontent.com/media/philipphager/twitter-dataset/master/v1/tweets-dedupe.csv`
 6. Run the image and mount the `out/` directory to the container to obtain the evaluation results: `docker run -it -p 8888:8888 -v $(pwd)/kafka-salsa-evaluation/out:/home/jovyan/out --rm kafka-salsa/evaluation`
 7. The evaluation results are published as Jupyter notebooks inside the `out/` directory. We recommend to use [nteract](https://nteract.io) to open the notebooks.
+
+
+## Evaluation Parameters
+Configure the evaluation using the [evaluation.yaml](https://github.com/philipphager/kafka-salsa-evaluation/blob/master/evaluation.yaml) file. Note that the project performs a cross evaluation of all combinations of salsa parameters for each configured kafka-salsa approach (application). 
+
+| Parameter        | Description                        | Default |
+| ---------------- | ---------------------------------- | ------- |
+| dataset-path  | Path to test dataset.  | ./data/tweets-dedupe.csv |
+| dataset-sample_size | Number of users to sample. All evaluation requests will be performed for each sampled user. | 100 |
+| applications_id | Name for implementaion appraoch. |  |
+| applications_host | IP address of deployed kafka-salsa endpoint. |  |
+| applications_port | Port of deployed kafka-salsa endpoint. |  |
+| salsa_walks | Number of random SALSA walks performed for each recommendation. |  |
+| salsa_length | Length of each random SALSA walk. |  |
+| salsa_limit | Top n tweets returned from the API. |  |
+
+
